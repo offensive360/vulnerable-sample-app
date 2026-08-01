@@ -9,6 +9,11 @@ permissions:
   contents: read
   security-events: write
 
+# The platform rejects concurrent scans of the same project (HTTP 409)
+concurrency:
+  group: o360-sast
+  cancel-in-progress: false
+
 jobs:
   sast:
     runs-on: ubuntu-latest
