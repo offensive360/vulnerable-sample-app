@@ -1,0 +1,27 @@
+name: Offensive360 SAST
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Offensive360 scan
+        uses: offensive360/sast-scan-action@v1
+        with:
+          api-url: ${{ vars.O360_API_URL }}
+          api-token: ${{ secrets.O360_API_TOKEN }}
+          upload-sarif: 'true'
+          # This repo is deliberately vulnerable — the severity gate is disabled
+          # so the demo run stays green while the findings land in the
+          # Security → Code scanning tab. In a real project use fail-on: high.
+          fail-on: none
